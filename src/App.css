@@ -5,12 +5,14 @@
 }
 
 body {
-  background-color: darkslategray;
-  color: #e4e4e4;
+  background-color: #e4e4e4;
+  color: black;
 }
 
 h1 {
   display: flex;
   justify-content: center;
+  font-size: 3rem;
+  font-weight: 600;
   margin: 3rem 0;
 }

@@ -5,7 +5,7 @@
 
   &_section {
     width: 400px;
-    background-color: #383838;
+    background-color: transparent;
     padding: 10px;
     border-radius: 10px;
 
@@ -16,7 +16,13 @@
     &_title {
       font-size: 18px;
       font-weight: 700;
-      margin: 10px 0 20px;
+      margin: 10px 0 25px;
+      color: black;
+    }
+
+    &_title span {
+      background-color: whitesmoke;
+      padding-right: 4px;
     }
 
     &_content {
@@ -25,4 +31,11 @@
       }
     }
   }
+}
+
+.addBtn {
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  font-size: 1.2rem;
 }

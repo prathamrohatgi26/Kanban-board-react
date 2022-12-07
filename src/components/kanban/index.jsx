@@ -32,6 +32,7 @@ const Kanban = () => {
       setData(data);
     }
   };
+  // var numb = document.getElementById("#tasks").children.length;
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -54,6 +55,7 @@ const Kanban = () => {
                     >
                       {(provided, snapshot) => (
                         <div
+                          id="tasks"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
@@ -68,6 +70,7 @@ const Kanban = () => {
                     </Draggable>
                   ))}
                   {provided.placeholder}
+                  <button className="addBtn">new +</button>
                 </div>
               </div>
             )}
