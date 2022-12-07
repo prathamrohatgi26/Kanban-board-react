@@ -1,17 +1,47 @@
 import "./kanban.scss";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import mockData from "../../MockData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../card";
 
 const Kanban = () => {
+  // initaition login
+  // start wtih empty data set
+
+  let parseF = async () => {
+    let inData = localStorage.getItem("mockData");
+    // inData = JSON.stringify(inData);
+    console.log(typeof inData);
+    inData = await JSON.parse(inData);
+
+    let values = Object.entries(inData);
+    console.log(inData);
+    // inData = values;
+    setData(inData);
+    // console.log(typeof inData);
+    // console.log(typeof mockData);
+    console.log(values);
+    console.log(inData);
+    return;
+  };
+
   const [data, setData] = useState(mockData);
+
+  useEffect(() => {
+    if (!localStorage.getItem("mockData")) {
+      localStorage.setItem("mockData", JSON.stringify(mockData));
+      setData(mockData);
+    } else {
+      parseF();
+    }
+  });
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
-
-    if (source.droppableid !== destination.droppableId) {
+    // console.log(source.droppableId, destination.droppableId);
+    // console.log(destination);
+    if (source.droppableId !== destination.droppableId) {
       const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
       const destinationColIndex = data.findIndex(
         (e) => e.id === destination.droppableId
@@ -28,11 +58,14 @@ const Kanban = () => {
 
       data[sourceColIndex].tasks = sourceTask;
       data[destinationColIndex].tasks = destinationTask;
-
+      // console.log(result);
       setData(data);
+      localStorage.setItem("mockData", JSON.stringify(data));
     }
   };
-  // var numb = document.getElementById("#tasks").children.length;
+
+  // window.localStorage.setItem("mockData", JSON.stringify(mockData));
+  // var numb = document.getElementById("#tasks").array.length;
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -45,7 +78,9 @@ const Kanban = () => {
                 className="kanban_section"
                 ref={provided.innerRef}
               >
-                <div className="kanban_section_title">{section.title}</div>
+                <div className="kanban_section_title">
+                  {section.title}-{section.tasks?.length}
+                </div>
                 <div className="kanban_section_content">
                   {section.tasks.map((task, index) => (
                     <Draggable
