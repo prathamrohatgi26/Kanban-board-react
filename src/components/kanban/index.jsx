@@ -204,7 +204,7 @@ const Kanban = () => {
                   {provided.placeholder}
                   <input
                     id="inputValue"
-                    placeholder="New+"
+                    placeholder="New +"
                     onKeyUp={(e) => {
                       handleKeyPress(e, section);
                     }}

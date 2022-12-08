@@ -41,3 +41,15 @@
 //   font-size: 1.2rem;
 //   border-radius: 5px;
 // }
+
+#inputValue {
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 12px;
+  border-radius: 3px;
+  width: 250px;
+  font-size: 18px;
+  outline: none;
+}
