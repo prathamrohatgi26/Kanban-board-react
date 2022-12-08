@@ -4,50 +4,45 @@ import mockData from "../../MockData";
 import { useEffect, useState } from "react";
 import Card from "../card";
 import { v4 as uuidv4 } from "uuid";
-// import {
-//   Modal,
-//   ModalOverlay,
-//   ModalContent,
-//   ModalHeader,
-//   ModalFooter,
-//   ModalBody,
-//   ModalCloseButton,
-// } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 const Kanban = () => {
   const [data, setData] = useState(mockData);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   //create new item
-  const handleKeyPress = (event) => {
-    console.log(event);
+  const handleKeyPress = (event, section) => {
+    console.log(section);
+    // console.log(event);
     if (event.key === "Enter") {
-      // const newValue = () => {
-      let entry = document.getElementById("inputValue").value;
-      let old = JSON.parse(localStorage.getItem("mockData")) || [];
-      // console.log(old);
-      // console.log(data);
-
+      let currentState = data;
       const currentTask = {
         id: uuidv4(),
-        title: entry,
+        title: event.target.value,
       };
 
-      if (mockData[0].id === "todo") {
-        mockData[0].tasks.push(currentTask);
-      } else if (mockData[1].id === "started") {
-        mockData[1].tasks.push(currentTask);
-      } else if (mockData[2].id === "comp") {
-        mockData[2].tasks.push(currentTask);
+      if (section.id === "todo") {
+        currentState[0].tasks.push(currentTask);
+      } else if (section.id === "started") {
+        currentState[1].tasks.push(currentTask);
+      } else if (section.id === "comp") {
+        currentState[2].tasks.push(currentTask);
       }
 
-      setData(old);
-      localStorage.setItem("mockData", JSON.stringify(old));
-
-      // console.log(mockData[1].tasks);
-      // console.log(mockData[0].id);
+      setData(currentState);
+      localStorage.setItem("mockData", JSON.stringify(currentState));
 
       return;
-      // };
     }
   };
   // initaition login
@@ -56,7 +51,6 @@ const Kanban = () => {
   let parseF = async () => {
     let inData = localStorage.getItem("mockData");
     // inData = JSON.stringify(inData);
-    // console.log(typeof inData);
     inData = await JSON.parse(inData);
 
     // let values = Object.entries(inData);
@@ -77,7 +71,7 @@ const Kanban = () => {
     } else {
       parseF();
     }
-  });
+  }, []);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -149,23 +143,10 @@ const Kanban = () => {
   // var numb = document.getElementById("#tasks").array.length;
 
   // function VerticallyCenter() {
-  //   const { isOpen, onOpen, onClose } = useDisclosure();
 
   //   return (
   //     <>
-  //       <Button onClick={onOpen}>Trigger modal</Button>
 
-  //       <Modal onClose={onClose} isOpen={isOpen} isCentered>
-  //         <ModalOverlay />
-  //         <ModalContent>
-  //           <ModalHeader>{tasks.title}</ModalHeader>
-  //           <ModalCloseButton />
-  //           <ModalBody></ModalBody>
-  //           <ModalFooter>
-  //             <Button onClick={onClose}>Close</Button>
-  //           </ModalFooter>
-  //         </ModalContent>
-  //       </Modal>
   //     </>
   //   );
   // }
@@ -202,7 +183,20 @@ const Kanban = () => {
                             opacity: snapshot.isDragging ? "0.5" : "1",
                           }}
                         >
-                          <Card onClick={task}>{task.title}</Card>
+                          <div onClick={onOpen}>
+                            <Card>{task.title}</Card>
+                            <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                              <ModalOverlay />
+                              <ModalContent>
+                                <ModalHeader>modal!</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalFooter>
+                                  <ModalBody></ModalBody>
+                                  <Button onClick={onClose}>Close</Button>
+                                </ModalFooter>
+                              </ModalContent>
+                            </Modal>
+                          </div>
                         </div>
                       )}
                     </Draggable>
@@ -211,7 +205,9 @@ const Kanban = () => {
                   <input
                     id="inputValue"
                     placeholder="New+"
-                    onKeyUp={handleKeyPress}
+                    onKeyUp={(e) => {
+                      handleKeyPress(e, section);
+                    }}
                   ></input>
                 </div>
               </div>
